@@ -5,8 +5,8 @@ This creates a test vault structure and tests the backup functionality.
 """
 
 import os
-import tempfile
 import subprocess
+import tempfile
 from pathlib import Path
 
 
@@ -72,9 +72,9 @@ retain_count = 3
 
         # Run backup tool with custom config
         result = subprocess.run(
-            [sys.executable, "obsidian_backup.py"],
+            [sys.executable, "main.py", "--config", config_path],
             cwd=os.getcwd(),
-            env={**os.environ, "PYTHONPATH": os.getcwd(), "BACKUP_CONFIG": config_path},
+            env={**os.environ, "PYTHONPATH": os.getcwd()},
         )
 
         if result.returncode == 0:
@@ -98,9 +98,9 @@ retain_count = 3
         print("\nTesting version management...")
         for i in range(3):
             result = subprocess.run(
-                [sys.executable, "obsidian_backup.py"],
+                [sys.executable, "main.py", "--config", config_path],
                 cwd=os.getcwd(),
-                env={**os.environ, "PYTHONPATH": os.getcwd(), "BACKUP_CONFIG": config_path},
+                env={**os.environ, "PYTHONPATH": os.getcwd()},
             )
 
             if result.returncode != 0:

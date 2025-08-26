@@ -4,35 +4,32 @@ Obsidian Vault Backup Tool
 A simple tool to backup Obsidian vaults to local directory with version management.
 """
 
-import os
-import sys
-import zipfile
 import configparser
 import logging
-from pathlib import Path
+import os
+import zipfile
 from datetime import datetime
+from pathlib import Path
 from typing import List
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("obsidian_backup.log"), logging.StreamHandler(sys.stdout)],
-)
-
+# Logger will be configured by the main entry point
 logger = logging.getLogger(__name__)
 
 
 class ObsidianBackup:
     def __init__(self, config_path: str = None):
-        self.config_path = config_path or os.environ.get("BACKUP_CONFIG", "backup_config.ini")
+        self.config_path = config_path or os.environ.get(
+            "BACKUP_CONFIG", "backup_config.ini"
+        )
         self.config = configparser.ConfigParser()
         self.load_config()
 
     def load_config(self) -> None:
         """Load configuration from INI file"""
         if not os.path.exists(self.config_path):
-            raise FileNotFoundError(f"Configuration file '{self.config_path}' not found")
+            raise FileNotFoundError(
+                f"Configuration file '{self.config_path}' not found"
+            )
 
         self.config.read(self.config_path)
 
@@ -70,7 +67,7 @@ class ObsidianBackup:
                 return False
 
             with zipfile.ZipFile(output_zip, "w", zipfile.ZIP_DEFLATED) as zipf:
-                for root, dirs, files in os.walk(source_dir):
+                for root, _dirs, files in os.walk(source_dir):
                     for file in files:
                         file_path = os.path.join(root, file)
                         # Use relative path for zip archive
@@ -144,18 +141,3 @@ class ObsidianBackup:
         except Exception as e:
             logger.error(f"Backup failed: {e}")
             return False
-
-
-def main():
-    """Main function"""
-    try:
-        backup_tool = ObsidianBackup()
-        success = backup_tool.run_backup()
-        sys.exit(0 if success else 1)
-    except Exception as e:
-        logger.error(f"Fatal error: {e}")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
