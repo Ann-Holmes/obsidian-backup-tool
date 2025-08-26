@@ -38,11 +38,24 @@ retain_count = 5
 
 ```bash
 # 直接运行
-python obsidian_backup.py
+python main.py
 
 # 或设置为可执行文件
-chmod +x obsidian_backup.py
-./obsidian_backup.py
+chmod +x main.py
+./main.py
+
+# 使用自定义配置文件
+python main.py --config /path/to/custom_config.ini
+
+# 启用详细日志输出
+python main.py --verbose
+
+# 模拟运行（不实际创建备份）
+python main.py --dry-run
+
+# 使用环境变量指定配置文件
+export BACKUP_CONFIG=/path/to/config.ini
+python main.py
 ```
 
 ### 3. 定时备份（macOS）
@@ -54,20 +67,33 @@ chmod +x obsidian_backup.py
 crontab -e
 
 # 添加以下行（每天凌晨2点备份）
-0 2 * * * /usr/bin/python3 /path/to/obsidian_backup.py
+0 2 * * * /usr/bin/python3 /path/to/main.py
 
-# 或者每小时备份一次
-0 * * * * /usr/bin/python3 /path/to/obsidian_backup.py
+# 或者每小时备份一次（带详细日志）
+0 * * * * /usr/bin/python3 /path/to/main.py --verbose
 ```
+
+## 命令行选项
+
+工具支持以下命令行参数：
+
+- `-c, --config`: 指定配置文件路径（默认：backup_config.ini 或 BACKUP_CONFIG 环境变量）
+- `-v, --verbose`: 启用详细日志输出（DEBUG 级别）
+- `--dry-run`: 模拟运行，不实际创建备份文件
+- `-h, --help`: 显示帮助信息
+
+## 环境变量
+
+- `BACKUP_CONFIG`: 指定配置文件路径，优先级高于默认配置
 
 ## 备份文件命名
 
 备份文件使用以下格式命名：
 ```
-obsidian_backup_YYYYMMDD_HHMMSS.zip
+obsidian_backup_YYYYMMDD_HHMMSS_fff.zip
 ```
 
-例如：`obsidian_backup_20250101_143022.zip`
+例如：`obsidian_backup_20250101_143022_123.zip`（包含毫秒精度）
 
 ## 日志文件
 
