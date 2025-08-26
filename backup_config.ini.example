@@ -1,0 +1,9 @@
+[backup]
+# Path to your Obsidian vault directory
+vault_path = /path/to/your/obsidian/vault
+
+# Directory where backups will be stored
+backup_dir = /path/to/backup/directory
+
+# Number of backup versions to retain (oldest will be deleted automatically)
+retain_count = 5
